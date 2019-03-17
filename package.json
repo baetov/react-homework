@@ -1,0 +1,22 @@
+{
+  "name": "baetov",
+  "version": "1.0.0",
+  "description": "gbwork",
+  "main": "static_src/index.js",
+  "scripts": {
+    "start": "webpack --mode development",
+    "start-server": "webpack-dev-server",
+    "build": "NODE_ENV=prod webpack --mode production"
+  },
+  "author": "Ahmad Baetov",
+  "license": "ISC",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@webpack-cli/update": "^0.1.5",
+    "webpack": "^4.29.6",
+    "webpack-bundle-tracker": "^0.4.2-beta",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.2.1"
+  }
+}
