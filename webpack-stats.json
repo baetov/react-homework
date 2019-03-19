@@ -1,1 +1,1 @@
-{"status":"done","publicPath":"/static/build/","chunks":{"app":[{"name":"app.js","publicPath":"/static/build/app.js","path":"C:\\Users\\ахма\\Desktop\\reactBaetov\\static\\build\\app.js"}]}}
+{"status":"error","publicPath":"/static/build/","error":"ModuleParseError","message":"Module parse failed: Unexpected token (7:0)\nYou may need an appropriate loader to handle this file type.\n| \r\n| ReactDOM.render(\r\n> <App />,\r\n| document.getElementById('root'),\r\n| );"}
