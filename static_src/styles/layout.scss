@@ -1,0 +1,22 @@
+.layout {
+  width: 50%;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.header {
+  width: 50%;
+  height: 40px;
+  background-color: lightgray;
+  flex-basis: 100%;
+}
+
+.layout-left-side {
+  width: 50%;
+
+}
+
+.layout-right-side {
+  width: 50%;
+}
