@@ -1,63 +1,66 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import connect from 'react-redux/es/connect/connect';
 import TextField from 'material-ui/TextField';
+import Message from './Message';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import SendIcon from 'material-ui/svg-icons/content/send';
-import Message from './Message';
+import { sendMessage, replyMessage } from '../actions/messageActions';
 import '../styles/messages.scss';
 
 
-export default class MessageField extends React.Component {
+class MessageField extends React.Component {
+    static propTypes = {
+        messageList: PropTypes.arrayOf(PropTypes.number).isRequired,
+        messages: PropTypes.object.isRequired,
+        nextId:PropTypes.number,
+        sendMessage: PropTypes.func.isRequired,
+        replyMessage: PropTypes.func.isRequired,
+    };
+    defaultProps = {
+        nextId: 1
+    };
+
     state = {
-        curId: 1,
-        messageList: [],
-        messages: {},
         input: '',
     };
 
-    componentDidUpdate(prevProps, prevState) {
-        const { messages,messageList,curId} = this.state;
-        const lastMessageSender = messages[curId - 1] ? messages[curId - 1].sender : '';
-        if (prevState.messageList.length < messageList.length && lastMessageSender === 'me') {
-            setTimeout(this.handleReplyMessage,500);
-        }
-    };
-    componentDidMount(){
-        this.handleReplyMessage()
-    };
-    handleKeyUp = (evt) => {
-        if (evt.keyCode === 13){
-            this.handleSendMessage()
+    componentDidUpdate(prevProps) {
+        const {messages,messageList,nextId } = this.props;
+        const lastMessageSender = messages[nextId - 1] ?  messages[nextId - 1].sender : '';
+        if (prevProps.messageList.length < messageList.length && lastMessageSender === 'me') {
+            setTimeout(this.handleReply, 500);
         }
     };
 
     handleSendMessage = () => {
-        const {messages,messageList,curId,input} = this.state;
-        if (input.length > 0){
-            const newMessageList = [...messageList,curId];
-            const newMessages = {...messages,[curId]:{text:input,sender: 'me'}};
-            messages[this.state.curId] = { sender: 'me', message: this.state.input };
-            this.setState({messages:newMessages, messageList:newMessageList, curId:curId + 1,input:''});
-        }
-
+        this.props.sendMessage(this.state.input);
+        this.setState({ input: '' });
     };
 
-    handleReplyMessage = () => {
-        const {messageList,messages,curId} = this.state;
-        const newMessageList = [...messageList,curId];
-        const newMessages = {...messages,[curId]:{text:'отстань я робот', sender:'bot'}};
-        this.setState({ messageList:newMessageList, messages:newMessages, curId: curId +1});
+
+    handleReply = () => {
+       this.props.replyMessage();
     };
 
     handleInput = (e) => {
         this.setState({ [e.target.name]: e.target.value })
     };
 
+    handleKeyUp = (evt) => {
+        if (evt.keyCode === 13){
+            this.handleSendMessage()
+        }
+    };
+
     render() {
-        const {messages,messageList}= this.state;
-        const messageComponents = messageList.map((messageId,index) =>
+        const {messages,messageList} = this.props;
+
+        const messageComponents = messageList.map((messageId, index) =>
             <Message
-                key='index'
-                text={messages[messageId].text}
+                key={ index }
+                message={messages[messageId].text}
                 sender={messages[messageId].sender}
             />
         );
@@ -65,22 +68,32 @@ export default class MessageField extends React.Component {
         return (
             <div>
                 <div className="message-field">
-                    {messageComponents}
+                    { messageComponents }
                 </div>
-                <div style={{textAlign:'center'}}>
-                    <TextField
-                        hintText="Hint Text"
-                        name='input'
-                        value={ this.state.input }
-                        onChange={ this.handleInput }
-                        onKeyUp={ this.handleKeyUp }
-                    />
-                    <FloatingActionButton onClick={ this.handleSendMessage }>
-                        <SendIcon />
-                    </FloatingActionButton>
+                <div className="enter-message">
+                <TextField
+                    hintText="сообщение"
+                    name="input"
+                    value={ this.state.input }
+                    onChange={ this.handleInput }
+                    onKeyUp={ this.handleKeyUp }
+                />
+                <FloatingActionButton onClick={ this.handleSendMessage }>
+                    <SendIcon />
+                </FloatingActionButton>
                 </div>
             </div>
 
         )
     }
 }
+
+const mapStateToProps = ({ messageReducer }) => ({
+    messageList: messageReducer.messageList,
+    messages: messageReducer.messages,
+    nextId: messageReducer.nextId,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage, replyMessage }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessageField);
