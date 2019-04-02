@@ -10,7 +10,7 @@ class Header extends React.Component {
 
     static defaultProps = {
         messageCount: 0,
-        data: 'пусто'
+
     };
 
     render() {

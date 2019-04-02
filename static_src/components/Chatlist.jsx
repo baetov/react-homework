@@ -1,32 +1,64 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import {push} from 'react-router-redux';
 import { Link } from 'react-router-dom';
 import { List, ListItem } from 'material-ui/List';
 import ContentInbox from 'material-ui/svg-icons/content/inbox';
-import ActionGrade from 'material-ui/svg-icons/action/grade';
-import ContentSend from 'material-ui/svg-icons/content/send';
-import ContentDrafts from 'material-ui/svg-icons/content/drafts';
-import {replyMessage, sendMessage} from "../actions/messageActions";
+import PropTypes from 'prop-types';
+import TextField from 'material-ui/TextField';
+import AddIcon from 'material-ui/svg-icons/content/add';
+import {addChat} from '../actions/chatActions';
+
 
 
 class ChatList extends React.Component{
+    static propTypes = {
+        chats: PropTypes.object.isRequired,
+        chatList: PropTypes.arrayOf(PropTypes.number).isRequired,
+        addChat: PropTypes.func.isRequired,
+        push: PropTypes.func.isRequired,
+    };
+
+    handleAddChat = (e) => {
+       this.props.addChat();
+    };
+
+    handleLink = (link) =>{
+        this.props.push(link)
+    };
+
 
     render() {
+        const {chatList,chats} = this.props;
+        const chatComponents = chatList.map((chatId, index) =>
+                <ListItem
+                    primaryText={chats[chatId].name}
+                    leftIcon={<ContentInbox />}
+                    onClick={() => this.handleLink(`/chat/${chatId}/`)}
+                />
+
+        );
+
+
         return (
             <List>
-                <Link to="/chat/1/"><ListItem primaryText="Inbox" leftIcon={<ContentInbox />} /></Link>
-                <Link to="/chat/2/"><ListItem primaryText="Starred" leftIcon={<ActionGrade />} /></Link>
-                <Link to="/chat/3/"><ListItem primaryText="Sent mail" leftIcon={<ContentSend />} /></Link>
-                <Link to="/chat/4/"><ListItem primaryText="Drafts" leftIcon={<ContentDrafts />} /></Link>
-                <Link to="/chat/5/"><ListItem primaryText="Inbox" leftIcon={<ContentInbox />} /></Link>
+                {chatComponents}
+                <ListItem
+                    primaryText={'добавить чат'}
+                    leftIcon={<AddIcon />}
+                    onClick={this.handleAddChat}
+                />
             </List>
         )
     }
 }
 
-const mapStateToProps = ({}) => ({});
+const mapStateToProps = ({chatReducer}) => ({
+    chatList: chatReducer.chatList,
+    chats: chatReducer.chats,
+});
 
-const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage, replyMessage }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat, push }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);

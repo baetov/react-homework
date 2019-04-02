@@ -17,9 +17,12 @@ class MessageField extends React.Component {
         nextId:PropTypes.number,
         sendMessage: PropTypes.func.isRequired,
         replyMessage: PropTypes.func.isRequired,
+        chatId: PropTypes.number,
+        chats: PropTypes.object.isRequired,
     };
-    defaultProps = {
-        nextId: 1
+    static defaultProps = {
+        nextId: 1,
+        chatId: 1,
     };
 
     state = {
@@ -35,18 +38,21 @@ class MessageField extends React.Component {
     };
 
     handleSendMessage = () => {
-        this.props.sendMessage(this.state.input);
+        const { chatId,nextId} = this.props;
+        this.props.sendMessage(chatId,nextId, this.state.input);
         this.setState({ input: '' });
     };
 
 
     handleReply = () => {
-       this.props.replyMessage();
+        const { chatId,nextId} = this.props;
+       this.props.replyMessage(nextId, chatId);
     };
 
     handleInput = (e) => {
         this.setState({ [e.target.name]: e.target.value })
     };
+
 
     handleKeyUp = (evt) => {
         if (evt.keyCode === 13){
@@ -55,9 +61,9 @@ class MessageField extends React.Component {
     };
 
     render() {
-        const {messages,messageList} = this.props;
+        const {messages,chats,chatId} = this.props;
 
-        const messageComponents = messageList.map((messageId, index) =>
+        const messageComponents = chats[chatId].messageList.map((messageId, index) =>
             <Message
                 key={ index }
                 message={messages[messageId].text}
@@ -88,10 +94,11 @@ class MessageField extends React.Component {
     }
 }
 
-const mapStateToProps = ({ messageReducer }) => ({
+const mapStateToProps = ({ messageReducer,chatReducer}) => ({
     messageList: messageReducer.messageList,
     messages: messageReducer.messages,
     nextId: messageReducer.nextId,
+    chats: chatReducer.chats,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage, replyMessage }, dispatch);
