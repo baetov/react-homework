@@ -1,29 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
 
+
 class Header extends React.Component {
-    static propTypes = {
-        messageCount: PropTypes.number,
-    };
-
-    static defaultProps = {
-        messageCount: 0,
-
-    };
-
     render() {
-        return (
-            <div className="header">
-                сообщений в корзине: { this.props.messageCount }
-
-            </div>
-        )
+        return <div className="header" />;
     }
 }
 
-const mapStateToProps = ({}) => ({});
+const mapStateToProps = ({}) => ({
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 

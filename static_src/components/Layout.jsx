@@ -10,9 +10,6 @@ export default class Layout extends React.Component {
     static propTypes = {
         chatId: PropTypes.number,
     };
-    static defaultProps = {
-        chatIdId: 1,
-    };
 
     render() {
         return (

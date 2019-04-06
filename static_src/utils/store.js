@@ -5,15 +5,15 @@ import middlewares from '../middlewares';
 
 function initStore(additionalMiddlewares = []) {
     const innitialStore = {};
-     if (__IS_DEV__) {
-    return createStore(
-        initReducers,
-        innitialStore,
-        compose(
-            applyMiddleware(...additionalMiddlewares, ...middlewares),
-            window.__REDUX_DEVTOOLS_EXTENSION__(),
-        ),
-    );
+    if (__IS_DEV__) {
+        return createStore(
+            initReducers,
+            innitialStore,
+            compose(
+                applyMiddleware(...additionalMiddlewares, ...middlewares),
+                window.__REDUX_DEVTOOLS_EXTENSION__(),
+            ),
+        );
     }
     return createStore(
         initReducers,
