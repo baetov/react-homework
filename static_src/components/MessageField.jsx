@@ -68,7 +68,7 @@ class MessageField extends React.Component {
                 <div>
                     <TextField
                         name="input"
-                        hintText="отправить сообщение"
+                        hintText="Hint Text"
                         value={ this.state.input }
                         onChange={ this.handleInput }
                         onKeyUp={ this.handleKeyUp }

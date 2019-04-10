@@ -1,12 +1,21 @@
 import update from 'react-addons-update';
 import { SEND_MESSAGE, REPLY_MESSAGE } from '../actions/messageActions';
-import { START_CHATS_LOADING, SUCCESS_CHATS_LOADING, ERROR_CHATS_LOADING, ADD_CHAT} from '../actions/chatActions';
+import {
+    START_CHATS_LOADING,
+    SUCCESS_CHATS_LOADING,
+    ERROR_CHATS_LOADING,
+    ADD_CHAT,
+    HIGHLIGHT_CHAT,
+    UNHIGHLIGHT_CHAT
+} from '../actions/chatActions';
 
 const initialStore = {
     chatList: [],
+    // chats: {1: { name: 'chat1', messages: [] }, 2: { name: 'chat2', messages: [] }},
     chats: {},
     nextChatId: 4,
     isLoading: true,
+    highlightedChat: undefined,
 };
 
 
@@ -51,6 +60,16 @@ export default function chatReducer(store = initialStore, action) {
                 chats: { $merge: { [store.nextChatId]: {name: `chat${store.nextChatId}`, messages: []} } },
                 chatList: { $set: newChatList },
                 nextChatId: { $set: store.nextChatId + 1 },
+            });
+        }
+        case HIGHLIGHT_CHAT: {
+            return update(store, {
+                highlightedChat: { $set: action.chatId },
+            });
+        }
+        case UNHIGHLIGHT_CHAT: {
+            return update(store, {
+                highlightedChat: { $set: undefined },
             });
         }
         default:

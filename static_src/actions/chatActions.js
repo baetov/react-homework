@@ -31,3 +31,16 @@ export const ADD_CHAT = '@@test/ADD_CHAT';
 export const addChat = () => ({
     type: ADD_CHAT,
 });
+
+export const HIGHLIGHT_CHAT = '@@message/HIGHLIGHT_CHAT';
+
+export const highlightChat = (chatId) => ({
+    type: HIGHLIGHT_CHAT,
+    chatId,
+});
+
+export const UNHIGHLIGHT_CHAT = '@@message/UNHIGHLIGHT_CHAT';
+
+export const unhighlightChat = () => ({
+    type: UNHIGHLIGHT_CHAT,
+});

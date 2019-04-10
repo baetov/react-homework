@@ -16,6 +16,11 @@ class ChatList extends React.Component {
         addChat: PropTypes.func.isRequired,
         push: PropTypes.func.isRequired,
         loadChats: PropTypes.func.isRequired,
+        highlightedChat: PropTypes.string,
+    };
+
+    static defaultProps = {
+        highlightedChat: undefined,
     };
 
     componentDidMount() {
@@ -31,11 +36,12 @@ class ChatList extends React.Component {
     };
 
     render() {
-        const { chatList, chats } = this.props;
+        const { chatList, chats, highlightedChat } = this.props;
         const chatComponents = chatList.map((chatId, index) =>
             <ListItem
                 primaryText={ chats[chatId].name }
                 leftIcon={<ContentInbox />}
+                style = { { backgroundColor: highlightedChat == chatId ? 'red' : '' } }
                 onClick={ () => this.handleLink(`/chat/${chatId}/`) }
             />
         );
@@ -47,7 +53,6 @@ class ChatList extends React.Component {
                     primaryText='Добавить новый чат'
                     leftIcon={ <AddIcon /> }
                     onClick={ this.handleAddChat }
-
                 />
             </List>
         )
@@ -57,6 +62,7 @@ class ChatList extends React.Component {
 const mapStateToProps = ({ chatReducer }) => ({
     chatList: chatReducer.chatList,
     chats: chatReducer.chats,
+    highlightedChat: chatReducer.highlightedChat,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({ addChat, loadChats, push }, dispatch);
