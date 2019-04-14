@@ -1,0 +1,5 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { "namespace": "android_app", "package_name": "localhost.reactchat",
+    "sha256_cert_fingerprints": ["62:7F:8D:60:A7:6E:F6:94:13:D7:B7:EF:92:A6:67:84:CD:D5:A0:10:04:22:59:2C:F7:BA:55:BD:B0:3D:0B:37"] }
+}]
